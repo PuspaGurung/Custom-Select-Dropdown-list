@@ -1,0 +1,47 @@
+// BORDER RADIUS
+@mixin  border-radius-sm {
+    border-radius: 4px    ;
+    -webkit-border-radius: 4px    ;
+    -moz-border-radius: 4px    ;
+    -ms-border-radius: 4px    ;
+    -o-border-radius: 4px    ;
+}
+
+// TRANSFORM
+@mixin transform-y-minus50percent{
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+}
+
+//BOX SHADOW
+@mixin  box-shadow-sm {
+box-shadow: 0 0 0.2rem $color-grey-dark;
+}
+
+// MEDIA QUERY
+// == BREAK POINT ==
+
+/* 0 - 600px: phone,
+600 - 900px> tablet portranit,
+900 - 1200px: tablet landscape,
+1200px > > : large screen width
+*/
+
+@mixin respond-mediaQuery($breakpoint) {
+    @if $breakpoint==phone {
+        @media (max-width: 37.5em) {@content}; // 600px = 600/16 = 37.5em;
+    }
+    @if $breakpoint==tab-port {
+        @media (max-width: 56.26em) {@content}; // 900px
+    }
+    @if $breakpoint==tab-landscape {
+        @media (max-width: 75em) {@content}; // 1200px
+    }
+    @if $breakpoint==big-screen {
+        @media (min-width: 75em) {@content}; //  (  screen width is > 1200px)
+    }
+}
+
