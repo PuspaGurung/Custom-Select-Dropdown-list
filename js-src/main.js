@@ -23,6 +23,7 @@ const selectOptionWrapper = getSingleDOMelement('.select-option__wrapper');
 const optionLists = getSingleDOMelement('.select-option__list');
 const listItems = getAllDOMelement('.select-option__list-item');
 
+
 //ARRAY FOR STORE ELEMENT ID
 const listItemIds = [];
 
@@ -74,28 +75,16 @@ for (let i = 0; i < (listItems.length); i++) {
 }
 
 
-//SEELCT LIST ITEM
+//SEELCTED DEFAULT LIST ITEM
 selectedItem.innerHTML = listItems[0].innerHTML; //default first item
-function selectItemByEventListener(e) {
-    for (let i = 0; i < listItems.length; i++) {
 
-        let selectByMouseClick = listItems[i].addEventListener('click', e => {
-            selectedItem.innerHTML = listItems[i].innerHTML;
-            return selectByMouseClick;
-        })
 
-        let selectByEnterKey = listItems[i].addEventListener('keydown', e => {
-            selectedItem.innerHTML = listItems[i].innerHTML;
-            return selectByEnterKey;
-        })
-    }
-}
-selectItemByEventListener();
 
 // APPLY EVENT LISTENER TO EACH LIST ITEM 
 listItems.forEach(item => {
+
     item.addEventListener('click', e => {
-        selectItemByEventListener(e);
+        selectedItem.innerHTML = item.innerHTML;
         closeListsVisibility();
     }
     );
@@ -103,7 +92,7 @@ listItems.forEach(item => {
     item.addEventListener('keydown', e => {
         switch (e.keyCode) {
             case enterKeyCode:
-                selectItemByEventListener(e);
+                selectedItem.innerHTML = item.innerHTML;
                 closeListsVisibility();
                 return;
 
@@ -194,12 +183,12 @@ function closeListsVisibility() {
 //HANDLE ARROW KEY
 // get ID of each list items
 listItems.forEach(item => listItemIds.push(item.id));
-console.log(listItemIds);
+
 
 
 function focusNextItem(direction) {
     const activeElementId = document.activeElement.id; //Get the currently focused element 
-    console.log(activeElementId);
+
 
     const currentActiveElementIndex = listItemIds.indexOf(activeElementId);
 
@@ -225,7 +214,7 @@ function focusNextItem(direction) {
 
         if (currentActiveElementIsNotFirstItem) {
             const nextListItemId = listItemIds[currentActiveElementIndex - 1];
-            console.log(document.querySelector(`#${nextListItemId}`).focus());
+            // console.log(document.querySelector(`#${nextListItemId}`).focus());
         }
     }
 
