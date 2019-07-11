@@ -74,22 +74,59 @@ for (var _i2 = 0; _i2 < listItems.length; _i2++) {
     addStylesheet(list_span, 'background:' + colorArray[_i2]); //apply backgroud color to each span tag
 }
 
-//SEELCTED DEFAULT LIST ITEM
-selectedItem.innerHTML = listItems[0].innerHTML; //default first item
+// APPLY EVENT LISTENER TO EACH LIST ITEM  (Note: the comment code below does not support in ie11 and safari 5.4)
+
+// listItems.forEach(item => {
+//     item.addEventListener('click', e => {
+//         selectedItem.innerHTML = item.innerHTML;
+//         closeListsVisibility();
+//     }
+//     );
+
+//     item.addEventListener('keydown', e => {
+//         switch (e.keyCode) {
+//             case enterKeyCode:
+//                 selectedItem.innerHTML = item.innerHTML;
+//                 closeListsVisibility();
+//                 return;
+
+//             case downArrowKeyCode:
+//                 focusNextItem(downArrowKeyCode);
+//                 return;
+//             case upArrowKeyCode:
+//                 focusNextItem(upArrowKeyCode);
+//                 return;
+//             case escapeKeyCode:
+//                 closeListsVisibility();
+//                 return;
+//             case leftArrowKeyCode:
+//                 closeListsVisibility();
+//                 return;
+
+//             case rightArrowKeyCode:
+//                 closeListsVisibility();
+//                 return;
+//             default:
+//                 return;
+//         }
+//     })
+// });
 
 
-// APPLY EVENT LISTENER TO EACH LIST ITEM 
-listItems.forEach(function (item) {
+// APPLY EVENT LISTENER TO EACH LIST ITEM (forEach() method does not support in ie11, safari below 5.4)
 
-    item.addEventListener('click', function (e) {
-        selectedItem.innerHTML = item.innerHTML;
+var _loop = function _loop(_i3) {
+    selectedItem.innerHTML = listItems[0].innerHTML; //default selected first item
+
+    listItems[_i3].addEventListener('click', function (e) {
+        selectedItem.innerHTML = listItems[_i3].innerHTML;
         closeListsVisibility();
     });
 
-    item.addEventListener('keydown', function (e) {
+    listItems[_i3].addEventListener('keydown', function (e) {
         switch (e.keyCode) {
             case enterKeyCode:
-                selectedItem.innerHTML = item.innerHTML;
+                selectedItem.innerHTML = listItems[_i3].innerHTML;
                 closeListsVisibility();
                 return;
 
@@ -113,7 +150,11 @@ listItems.forEach(function (item) {
                 return;
         }
     });
-});
+};
+
+for (var _i3 = 0; _i3 < listItems.length; _i3++) {
+    _loop(_i3);
+};
 
 // EVENT LISTENER 
 selectedItemWrap.addEventListener('click', function (e) {
@@ -179,10 +220,11 @@ function closeListsVisibility() {
 listItems.forEach(function (item) {
     return listItemIds.push(item.id);
 });
+console.log(listItemIds);
 
 function focusNextItem(direction) {
     var activeElementId = document.activeElement.id; //Get the currently focused element 
-
+    console.log(activeElementId);
 
     var currentActiveElementIndex = listItemIds.indexOf(activeElementId);
 
@@ -202,7 +244,7 @@ function focusNextItem(direction) {
 
         if (currentActiveElementIsNotFirstItem) {
             var _nextListItemId = listItemIds[currentActiveElementIndex - 1];
-            // console.log(document.querySelector(`#${nextListItemId}`).focus());
+            console.log(document.querySelector('#' + _nextListItemId).focus());
         }
     }
 }

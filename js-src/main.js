@@ -75,24 +75,58 @@ for (let i = 0; i < (listItems.length); i++) {
 }
 
 
-//SEELCTED DEFAULT LIST ITEM
-selectedItem.innerHTML = listItems[0].innerHTML; //default first item
+// APPLY EVENT LISTENER TO EACH LIST ITEM  (Note: the comment code below does not support in ie11 and safari 5.4)
+
+// listItems.forEach(item => {
+//     item.addEventListener('click', e => {
+//         selectedItem.innerHTML = item.innerHTML;
+//         closeListsVisibility();
+//     }
+//     );
+
+//     item.addEventListener('keydown', e => {
+//         switch (e.keyCode) {
+//             case enterKeyCode:
+//                 selectedItem.innerHTML = item.innerHTML;
+//                 closeListsVisibility();
+//                 return;
+
+//             case downArrowKeyCode:
+//                 focusNextItem(downArrowKeyCode);
+//                 return;
+//             case upArrowKeyCode:
+//                 focusNextItem(upArrowKeyCode);
+//                 return;
+//             case escapeKeyCode:
+//                 closeListsVisibility();
+//                 return;
+//             case leftArrowKeyCode:
+//                 closeListsVisibility();
+//                 return;
+
+//             case rightArrowKeyCode:
+//                 closeListsVisibility();
+//                 return;
+//             default:
+//                 return;
+//         }
+//     })
+// });
 
 
+// APPLY EVENT LISTENER TO EACH LIST ITEM (forEach() method does not support in ie11, safari below 5.4)
+for (let i = 0; i < listItems.length; i++) {
+    selectedItem.innerHTML = listItems[0].innerHTML;  //default selected first item
 
-// APPLY EVENT LISTENER TO EACH LIST ITEM 
-listItems.forEach(item => {
-
-    item.addEventListener('click', e => {
-        selectedItem.innerHTML = item.innerHTML;
+    listItems[i].addEventListener('click', function (e) {
+        selectedItem.innerHTML = listItems[i].innerHTML;
         closeListsVisibility();
-    }
-    );
+    });
 
-    item.addEventListener('keydown', e => {
+    listItems[i].addEventListener('keydown', function (e) {
         switch (e.keyCode) {
             case enterKeyCode:
-                selectedItem.innerHTML = item.innerHTML;
+                selectedItem.innerHTML = listItems[i].innerHTML;
                 closeListsVisibility();
                 return;
 
@@ -115,8 +149,10 @@ listItems.forEach(item => {
             default:
                 return;
         }
-    })
-});
+    });
+};
+
+
 
 // EVENT LISTENER 
 selectedItemWrap.addEventListener('click', e => {
@@ -183,12 +219,12 @@ function closeListsVisibility() {
 //HANDLE ARROW KEY
 // get ID of each list items
 listItems.forEach(item => listItemIds.push(item.id));
-
+console.log(listItemIds);
 
 
 function focusNextItem(direction) {
     const activeElementId = document.activeElement.id; //Get the currently focused element 
-
+    console.log(activeElementId);
 
     const currentActiveElementIndex = listItemIds.indexOf(activeElementId);
 
@@ -214,7 +250,7 @@ function focusNextItem(direction) {
 
         if (currentActiveElementIsNotFirstItem) {
             const nextListItemId = listItemIds[currentActiveElementIndex - 1];
-            // console.log(document.querySelector(`#${nextListItemId}`).focus());
+            console.log(document.querySelector(`#${nextListItemId}`).focus());
         }
     }
 
