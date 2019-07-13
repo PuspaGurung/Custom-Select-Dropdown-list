@@ -36,19 +36,24 @@ const rightArrowKeyCode = 39;
 const downArrowKeyCode = 40;
 const escapeKeyCode = 27;
 
-//ADD STYLE ON SELECT-OPTION__WRAPPER
-// if list items are more than 7 then fixed the height and add vertical scroll bar 
-if (listItems.length > 7) {
-    addStylesheet(selectOptionWrapper, "overflow-y: scroll; height:21.5rem");
-}
+//ADD STYLESHEET AND ATTRIBUTES
 
-// SET ATTRIBUTE
-// list items :: tabindex, id
-for (let i = 0; i < listItems.length; i++) {
-    listItems[i].setAttribute("tabindex", 0);
-    listItems[i].setAttribute("id", `option-${i + 1}`);
-    listItems[i].setAttribute("role", `listitem`);
-}
+(function () {
+    // if list items are more than 7 then fixed the height and add vertical scroll bar 
+    if (listItems.length > 7) {
+        addStylesheet(selectOptionWrapper, "overflow-y: scroll; height:21.5rem");
+    }
+
+    // SET ATTRIBUTE
+    // list items :: tabindex, id
+    for (let i = 0; i < listItems.length; i++) {
+        listItems[i].setAttribute("tabindex", 0);
+        listItems[i].setAttribute("id", `option-${i + 1}`);
+        listItems[i].setAttribute("role", `listitem`);
+    }
+})();
+
+
 
 // GET RANDOM COLOR
 function getRendomColor() {
@@ -115,44 +120,47 @@ for (let i = 0; i < (listItems.length); i++) {
 
 
 // APPLY EVENT LISTENER TO EACH LIST ITEM (forEach() method does not support in ie11, safari below 5.4)
-for (let i = 0; i < listItems.length; i++) {
-    selectedItem.innerHTML = listItems[0].innerHTML;  //default selected first item
+let eventHandle = (function () {
+    for (let i = 0; i < listItems.length; i++) {
+        selectedItem.innerHTML = listItems[0].innerHTML;  //default selected first item
 
-    listItems[i].addEventListener('click', function (e) {
-        selectedItem.innerHTML = listItems[i].innerHTML;
-        closeListsVisibility();
-    });
+        listItems[i].addEventListener('click', function (e) {
+            selectedItem.innerHTML = listItems[i].innerHTML;
+            selectedItem.focus();
+            closeListsVisibility();
+        });
 
-    listItems[i].addEventListener('keydown', function (e) {
-        switch (e.keyCode) {
-            case enterKeyCode:
-                selectedItem.innerHTML = listItems[i].innerHTML;
-                closeListsVisibility();
-                return;
+        listItems[i].addEventListener('keydown', function (e) {
+            switch (e.keyCode) {
+                case enterKeyCode:
+                    selectedItem.innerHTML = listItems[i].innerHTML;
+                    selectedItem.focus();
+                    closeListsVisibility();
+                    return;
 
-            case downArrowKeyCode:
-                focusNextItem(downArrowKeyCode);
-                return;
-            case upArrowKeyCode:
-                focusNextItem(upArrowKeyCode);
-                return;
-            case escapeKeyCode:
-                closeListsVisibility();
-                return;
-            case leftArrowKeyCode:
-                closeListsVisibility();
-                return;
+                case downArrowKeyCode:
+                    focusNextItem(downArrowKeyCode);
+                    return;
+                case upArrowKeyCode:
+                    focusNextItem(upArrowKeyCode);
+                    return;
+                case escapeKeyCode:
+                    closeListsVisibility();
+                    return;
+                case leftArrowKeyCode:
+                    closeListsVisibility();
+                    return;
 
-            case rightArrowKeyCode:
-                closeListsVisibility();
-                return;
-            default:
-                return;
-        }
-    });
-};
+                case rightArrowKeyCode:
+                    closeListsVisibility();
+                    return;
+                default:
+                    return;
+            }
+        });
+    };
 
-
+})();
 
 // EVENT LISTENER 
 selectedItemWrap.addEventListener('click', e => {
@@ -178,6 +186,7 @@ document.addEventListener("click", function (e) {
 
 //TOGGLE VISIBILITY OF LISTS
 function toggleDropdownVisibility(e) {
+
 
     function toggle() {
         return selectOptionWrapper.classList.contains("hide__drop-down") ? selectOptionWrapper.classList.remove("hide__drop-down") : selectOptionWrapper.classList.add("hide__drop-down");
@@ -223,8 +232,9 @@ console.log(listItemIds);
 
 
 function focusNextItem(direction) {
+    //   console.log(directio);
     const activeElementId = document.activeElement.id; //Get the currently focused element 
-    console.log(activeElementId);
+    // console.log(activeElementId);
 
     const currentActiveElementIndex = listItemIds.indexOf(activeElementId);
 

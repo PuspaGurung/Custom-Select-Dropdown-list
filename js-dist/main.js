@@ -36,24 +36,27 @@ var rightArrowKeyCode = 39;
 var downArrowKeyCode = 40;
 var escapeKeyCode = 27;
 
-//ADD STYLE ON SELECT-OPTION__WRAPPER
-// if list items are more than 7 then fixed the height and add vertical scroll bar 
-if (listItems.length > 7) {
-    addStylesheet(selectOptionWrapper, "overflow-y: scroll; height:21.5rem");
-}
+//ADD STYLESHEET AND ATTRIBUTES
 
-// SET ATTRIBUTE
-// list items :: tabindex, id
-for (var i = 0; i < listItems.length; i++) {
-    listItems[i].setAttribute("tabindex", 0);
-    listItems[i].setAttribute("id", 'option-' + (i + 1));
-    listItems[i].setAttribute("role", 'listitem');
-}
+(function () {
+    // if list items are more than 7 then fixed the height and add vertical scroll bar 
+    if (listItems.length > 7) {
+        addStylesheet(selectOptionWrapper, "overflow-y: scroll; height:21.5rem");
+    }
+
+    // SET ATTRIBUTE
+    // list items :: tabindex, id
+    for (var i = 0; i < listItems.length; i++) {
+        listItems[i].setAttribute("tabindex", 0);
+        listItems[i].setAttribute("id", 'option-' + (i + 1));
+        listItems[i].setAttribute("role", 'listitem');
+    }
+})();
 
 // GET RANDOM COLOR
 function getRendomColor() {
     var getRndColor = [];
-    for (var _i = 0; _i < listItems.length; _i++) {
+    for (var i = 0; i < listItems.length; i++) {
         var randomColor = Math.floor(Math.random() * 16777345).toString(16);
         var clr = '#000000'.slice(0, -randomColor.length) + randomColor;
         getRndColor.push(clr);
@@ -67,11 +70,11 @@ var randomColorArray = getRendomColor(); // random color
 var colorArray = defaultColor.concat(randomColorArray); // default color and random color (if there are more than four items then apply random color)
 
 // CRATE SPAN TAG AND APPLY BACKGROUND COLOR (INSIDE EACH LIST ITEM)
-for (var _i2 = 0; _i2 < listItems.length; _i2++) {
+for (var i = 0; i < listItems.length; i++) {
     var createSpan = document.createElement('span'); // create span tag inside each list-item
-    var list_span = listItems[_i2].appendChild(createSpan);
+    var list_span = listItems[i].appendChild(createSpan);
     list_span.classList.add('list-item_span'); // add class in span tag
-    addStylesheet(list_span, 'background:' + colorArray[_i2]); //apply backgroud color to each span tag
+    addStylesheet(list_span, 'background:' + colorArray[i]); //apply backgroud color to each span tag
 }
 
 // APPLY EVENT LISTENER TO EACH LIST ITEM  (Note: the comment code below does not support in ie11 and safari 5.4)
@@ -114,47 +117,50 @@ for (var _i2 = 0; _i2 < listItems.length; _i2++) {
 
 
 // APPLY EVENT LISTENER TO EACH LIST ITEM (forEach() method does not support in ie11, safari below 5.4)
+var eventHandle = function () {
+    var _loop = function _loop(_i) {
+        selectedItem.innerHTML = listItems[0].innerHTML; //default selected first item
 
-var _loop = function _loop(_i3) {
-    selectedItem.innerHTML = listItems[0].innerHTML; //default selected first item
+        listItems[_i].addEventListener('click', function (e) {
+            selectedItem.innerHTML = listItems[_i].innerHTML;
+            selectedItem.focus();
+            closeListsVisibility();
+        });
 
-    listItems[_i3].addEventListener('click', function (e) {
-        selectedItem.innerHTML = listItems[_i3].innerHTML;
-        closeListsVisibility();
-    });
+        listItems[_i].addEventListener('keydown', function (e) {
+            switch (e.keyCode) {
+                case enterKeyCode:
+                    selectedItem.innerHTML = listItems[_i].innerHTML;
+                    selectedItem.focus();
+                    closeListsVisibility();
+                    return;
 
-    listItems[_i3].addEventListener('keydown', function (e) {
-        switch (e.keyCode) {
-            case enterKeyCode:
-                selectedItem.innerHTML = listItems[_i3].innerHTML;
-                closeListsVisibility();
-                return;
+                case downArrowKeyCode:
+                    focusNextItem(downArrowKeyCode);
+                    return;
+                case upArrowKeyCode:
+                    focusNextItem(upArrowKeyCode);
+                    return;
+                case escapeKeyCode:
+                    closeListsVisibility();
+                    return;
+                case leftArrowKeyCode:
+                    closeListsVisibility();
+                    return;
 
-            case downArrowKeyCode:
-                focusNextItem(downArrowKeyCode);
-                return;
-            case upArrowKeyCode:
-                focusNextItem(upArrowKeyCode);
-                return;
-            case escapeKeyCode:
-                closeListsVisibility();
-                return;
-            case leftArrowKeyCode:
-                closeListsVisibility();
-                return;
+                case rightArrowKeyCode:
+                    closeListsVisibility();
+                    return;
+                default:
+                    return;
+            }
+        });
+    };
 
-            case rightArrowKeyCode:
-                closeListsVisibility();
-                return;
-            default:
-                return;
-        }
-    });
-};
-
-for (var _i3 = 0; _i3 < listItems.length; _i3++) {
-    _loop(_i3);
-};
+    for (var _i = 0; _i < listItems.length; _i++) {
+        _loop(_i);
+    };
+}();
 
 // EVENT LISTENER 
 selectedItemWrap.addEventListener('click', function (e) {
@@ -223,8 +229,9 @@ listItems.forEach(function (item) {
 console.log(listItemIds);
 
 function focusNextItem(direction) {
+    //   console.log(directio);
     var activeElementId = document.activeElement.id; //Get the currently focused element 
-    console.log(activeElementId);
+    // console.log(activeElementId);
 
     var currentActiveElementIndex = listItemIds.indexOf(activeElementId);
 
